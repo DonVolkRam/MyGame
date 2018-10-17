@@ -15,8 +15,9 @@ namespace MyGame
         }
         public virtual void Draw()
         {
-            Game.Buffer.Graphics.DrawEllipse(Pens.White, Pos.X, Pos.Y,
-            Size.Width, Size.Height);
+            Game.Buffer.Graphics.DrawEllipse(Pens.White, Pos.X, Pos.Y, Size.Width, Size.Height);
+            Image image = Image.FromFile("..\\..\\asteroid.bmp");
+            Game.Buffer.Graphics.DrawImage(image, Pos.X, Pos.Y);
         }
         public virtual void Update()
         {
