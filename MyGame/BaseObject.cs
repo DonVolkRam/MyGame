@@ -2,31 +2,67 @@
 using System.Drawing;
 namespace MyGame
 {
+    /// <summary>
+    /// Класс описатель базового объекта
+    /// </summary>
     class BaseObject
     {
+        /// <summary>
+        /// Начальная позиция
+        /// </summary>
         protected Point Pos;
+        /// <summary>
+        /// Направление движения
+        /// </summary>
         protected Point Dir;
+        /// <summary>
+        /// Размер
+        /// </summary>
         protected Size Size;
+        /// <summary>
+        /// Случайное значение
+        /// </summary>
+        private Random rnd = new Random();
+        /// <summary>
+        /// Случайнок направление
+        /// </summary>
+        private int rndDir;
+        /// <summary>
+        /// Конструкктор базового объекта
+        /// </summary>
+        /// <param name="pos">начальная позиция</param>
+        /// <param name="dir">направление движения</param>
+        /// <param name="size">размер объекта</param>
         public BaseObject(Point pos, Point dir, Size size)
         {
             Pos = pos;
             Dir = dir;
             Size = size;
+           
         }
-        public virtual void Draw()
+        /// <summary>
+        /// Конструкктор базового объекта
+        /// </summary>
+        /// <param name="pos">начальная позиция</param>
+        /// <param name="size">размер</param>
+        public BaseObject(Point pos, Size size)
         {
-            Game.Buffer.Graphics.DrawEllipse(Pens.White, Pos.X, Pos.Y, Size.Width, Size.Height);
-            Image image = Image.FromFile("..\\..\\asteroid.bmp");
-            Game.Buffer.Graphics.DrawImage(image, Pos.X, Pos.Y);
+            Pos = pos;
+            Dir = new Point(rnd.Next(-10, 10), rnd.Next(-10, 10));
+            Size = size;
+
         }
-        public virtual void Update()
-        {
-            Pos.X = Pos.X + Dir.X;
-            Pos.Y = Pos.Y + Dir.Y;
-            if (Pos.X < 0) Dir.X = -Dir.X;
-            if (Pos.X > Game.Width) Dir.X = -Dir.X;
-            if (Pos.Y < 0) Dir.Y = -Dir.Y;
-            if (Pos.Y > Game.Height) Dir.Y = -Dir.Y;
-        }
+        /// <summary>
+        /// получение случаного значения направвления
+        /// </summary>
+        public int RndDir { get => rnd.Next(-10, 10); set => rndDir = value; }
+        /// <summary>
+        /// опичатель отрисовки
+        /// </summary>
+        public virtual void Draw(){}
+        /// <summary>
+        /// описатель обновления объекта
+        /// </summary>
+        public virtual void Update(){}
     }
 }
