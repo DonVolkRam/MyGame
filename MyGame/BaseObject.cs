@@ -5,7 +5,7 @@ namespace MyGame
     /// <summary>
     /// Класс описатель базового объекта
     /// </summary>
-    class BaseObject
+    abstract class BaseObject
     {
         /// <summary>
         /// Начальная позиция
@@ -33,7 +33,7 @@ namespace MyGame
         /// <param name="pos">начальная позиция</param>
         /// <param name="dir">направление движения</param>
         /// <param name="size">размер объекта</param>
-        public BaseObject(Point pos, Point dir, Size size)
+        protected BaseObject(Point pos, Point dir, Size size)
         {
             Pos = pos;
             Dir = dir;
@@ -45,7 +45,7 @@ namespace MyGame
         /// </summary>
         /// <param name="pos">начальная позиция</param>
         /// <param name="size">размер</param>
-        public BaseObject(Point pos, Size size)
+        protected BaseObject(Point pos, Size size)
         {
             Pos = pos;
             Dir = new Point(rnd.Next(-10, 10), rnd.Next(-10, 10));
@@ -63,6 +63,6 @@ namespace MyGame
         /// <summary>
         /// описатель обновления объекта
         /// </summary>
-        public virtual void Update(){}
+        public abstract void Update();
     }
 }

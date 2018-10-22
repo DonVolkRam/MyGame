@@ -9,19 +9,21 @@ namespace MyGame
 {
     class Asteroid : BaseObject
     {
+        public int Power { get; set; }
+
         /// <summary>
         /// Конструкктор объекта асткроида
         /// </summary>
         /// <param name="pos">начальная позиция</param>
         /// <param name="dir">направление движения</param>
         /// <param name="size">размер объекта</param>
-        public Asteroid(Point pos, Point dir, Size size) : base(pos, dir, size) { }
+        public Asteroid(Point pos, Point dir, Size size) : base(pos, dir, size) { Power = 1; }
         /// <summary>
         /// Конструкктор объекта асткроида
         /// </summary>
         /// <param name="pos">начальная позиция</param>
         /// <param name="size">размер</param>
-        public Asteroid(Point pos, Size size) : base(pos, size) { }
+        public Asteroid(Point pos, Size size) : base(pos, size) { Power = 1; }
         /// <summary>
         /// отрисовка астероида
         /// </summary>
@@ -30,6 +32,8 @@ namespace MyGame
             Game.Buffer.Graphics.DrawEllipse(Pens.White, Pos.X, Pos.Y, Size.Width, Size.Height);
             Image image = Image.FromFile("..\\..\\asteroid.bmp");
             Game.Buffer.Graphics.DrawImage(image, Pos);
+
+ //           Game.Buffer.Graphics.FillEllipse(Brushes.White, Pos.X, Pos.Y, Size.Width, Size.Height);
         }
         /// <summary>
         /// обновление положения астероида
