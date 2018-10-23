@@ -52,6 +52,15 @@ namespace MyGame
         /// <param name="form"></param>
         public static void Init(Form form)
         {
+            //4.Сделать проверку на задание размера экрана в классе Game. Если высота или ширина
+            //(Width, Height) больше 1000 или принимает отрицательное значение, выбросить исключение
+            //ArgumentOutOfRangeException().
+            if (false)
+            if (form.Width > 1000 || form.Height > 1000)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+
             Timer timer = new Timer { Interval = 100 };
             timer.Start();
             timer.Tick += Timer_Tick;
@@ -130,6 +139,8 @@ namespace MyGame
                 _asteroids[i].Update();
                 for (int j = 0; j < _bullet.Count; j++)
                 {
+                    //3.Сделать так, чтобы при столкновении пули с астероидом они 
+                    //регенерировались в разных концах экрана.
                     if (_asteroids[i].Collision(_bullet[j]))
                     {
                         System.Media.SystemSounds.Hand.Play();
