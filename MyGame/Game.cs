@@ -150,16 +150,29 @@ namespace MyGame
             //foreach (BaseObject obj in _objs)
             //    obj.Update();
 
+            Random rnd = new Random();            
             foreach (BaseObject obj in _objs)
                 obj.Update();
-            foreach (Asteroid a in _asteroids)
+            for (int i = 0; i < _asteroids.Count; i++)
             {
-                a.Update();
-                foreach (Bullet obj in _bullet)
-                    if (a.Collision(obj))
+
+                //            }
+                //            foreach (Asteroid a in _asteroids)
+                //            {
+                _asteroids[i].Update();
+                for (int j = 0; j < _bullet.Count; j++)
+                {
+
+                    //                    }
+                    //                foreach (Bullet obj in _bullet)
+                    if (_asteroids[i].Collision(_bullet[j]))
                     {
                         System.Media.SystemSounds.Hand.Play();
-                    }                                
+                        int r = rnd.Next(5, 50);
+                        _asteroids[i] = new Asteroid(new Point(Game.Width, rnd.Next(0, Game.Height)), new Point(-r / 5, r), new Size(r, r));
+                        _bullet[j] = new Bullet(new Point(0, r * 20), new Point(5, 0), new Size(4, 1));
+                    }
+                }
             }
             foreach (Star obj in _star)
                 obj.Update();

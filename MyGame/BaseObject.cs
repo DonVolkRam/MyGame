@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Drawing;
 namespace MyGame
 {    
@@ -28,7 +29,7 @@ namespace MyGame
         /// <summary>
         /// Случайное значение
         /// </summary>
-        private Random rnd = new Random();
+        protected Random rnd = new Random();
         /// <summary>
         /// Случайнок направление
         /// </summary>
