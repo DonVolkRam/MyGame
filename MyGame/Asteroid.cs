@@ -29,11 +29,12 @@ namespace MyGame
         /// </summary>
         public override void Draw()
         {
-            Game.Buffer.Graphics.DrawEllipse(Pens.White, Pos.X, Pos.Y, Size.Width, Size.Height);
+            //Game.Buffer.Graphics.DrawEllipse(Pens.White, Pos.X, Pos.Y, Size.Width, Size.Height);
             Image image = Image.FromFile("..\\..\\asteroid.bmp");
-            Game.Buffer.Graphics.DrawImage(image, Pos);
+//            Game.Buffer.Graphics.DrawImage(image, Pos);            
+            Game.Buffer.Graphics.DrawImage(image, Pos.X, Pos.Y, Size.Width, Size.Height);
 
- //           Game.Buffer.Graphics.FillEllipse(Brushes.White, Pos.X, Pos.Y, Size.Width, Size.Height);
+            //           Game.Buffer.Graphics.FillEllipse(Brushes.White, Pos.X, Pos.Y, Size.Width, Size.Height);
         }
         /// <summary>
         /// обновление положения астероида
@@ -46,6 +47,6 @@ namespace MyGame
             if (Pos.X > Game.Width) Dir.X = -Dir.X;
             if (Pos.Y < Size.Height) Dir.Y = -Dir.Y;
             if (Pos.Y > Game.Height) Dir.Y = -Dir.Y;
-        }
+        }               
     }
 }

@@ -1,11 +1,17 @@
 ﻿using System;
 using System.Drawing;
 namespace MyGame
-{
+{    
+    interface ICollision
+    {
+        bool Collision(ICollision obj);
+        Rectangle Rect { get; }
+    }
+
     /// <summary>
     /// Класс описатель базового объекта
     /// </summary>
-    abstract class BaseObject
+    abstract class BaseObject : ICollision
     {
         /// <summary>
         /// Начальная позиция
@@ -59,10 +65,13 @@ namespace MyGame
         /// <summary>
         /// опичатель отрисовки
         /// </summary>
-        public virtual void Draw(){}
+        public abstract void Draw();
         /// <summary>
         /// описатель обновления объекта
         /// </summary>
         public abstract void Update();
+
+        public bool Collision(ICollision o) => o.Rect.IntersectsWith(this.Rect);
+        public Rectangle Rect => new Rectangle(Pos, Size);
     }
 }
