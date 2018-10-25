@@ -59,6 +59,7 @@ namespace MyGame
             Size = size;
 
         }
+        public delegate void Message();
         /// <summary>
         /// получение случаного значения направвления
         /// </summary>

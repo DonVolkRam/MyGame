@@ -7,15 +7,14 @@ using System.Threading.Tasks;
 
 namespace MyGame
 {
-    class BackGround : BaseObject
+    class Backcround : BaseObject
     {
+        public Backcround (Point pos, Point dir, Size size) : base(pos, dir, size) { }
         Image image = Image.FromFile("..\\..\\background.png");
-        public BackGround (Point pos, Point dir, Size size) : base(pos, dir, size) { }
 
         public override void Draw()
         {
-//            Game.Buffer.Graphics.Clear(Color.Black);
-            
+            Game.Buffer.Graphics.Clear(Color.Black);           
             Game.Buffer.Graphics.DrawImage(image, Pos);
         }
         /// <summary>
@@ -24,8 +23,7 @@ namespace MyGame
         public override void Update()
         {
             Pos.X = Pos.X + Dir.X;
-            if (Pos.X < -Size.Width)
-                Pos.X = 1600/*Game.Width*/;
+            if (Pos.X < -Size.Width) Pos.X = Game.Width + Size.Width;
             //            if (Pos.X > Game.Width) Dir.X = -Dir.X;
         }
 

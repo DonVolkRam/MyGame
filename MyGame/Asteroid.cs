@@ -9,6 +9,7 @@ namespace MyGame
 {
     class Asteroid : BaseObject
     {
+        Image image = Image.FromFile("..\\..\\asteroid.bmp");
         public int Power { get; set; }
 
         /// <summary>
@@ -30,8 +31,7 @@ namespace MyGame
         /// </summary>
         public override void Draw()
         {
-            //Game.Buffer.Graphics.DrawEllipse(Pens.White, Pos.X, Pos.Y, Size.Width, Size.Height);
-            Image image = Image.FromFile("..\\..\\asteroid.bmp");
+            //Game.Buffer.Graphics.DrawEllipse(Pens.White, Pos.X, Pos.Y, Size.Width, Size.Height);            
 //            Game.Buffer.Graphics.DrawImage(image, Pos);            
             Game.Buffer.Graphics.DrawImage(image, Pos.X, Pos.Y, Size.Width, Size.Height);
 

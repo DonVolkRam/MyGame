@@ -36,6 +36,8 @@ namespace MyGame
         static Game()
         {
         }
+        private static Ship _ship = new Ship(new Point(10, 400), new Point(5, 5), new Size(10, 10));
+
         /// <summary>
         /// интервал оновления
         /// </summary>
@@ -46,6 +48,10 @@ namespace MyGame
             Draw();
             Update();
         }
+
+        private static Timer _timer = new Timer();
+        public static Random Rnd = new Random();
+
         /// <summary>
         /// инициалзация графической составляющей
         /// </summary>
@@ -61,9 +67,9 @@ namespace MyGame
                 throw new ArgumentOutOfRangeException();
             }
 
-            Timer timer = new Timer { Interval = 100 };
-            timer.Start();
-            timer.Tick += Timer_Tick;
+//            Timer timer = new Timer { Interval = 100 };
+            _timer.Start();
+            _timer.Tick += Timer_Tick;
             // Графическое устройство для вывода графики
             Graphics g;
             // Предоставляет доступ к главному буферу графического контекста для текущего приложения
@@ -76,6 +82,7 @@ namespace MyGame
             // Связываем буфер в памяти с графическим объектом, чтобы рисовать в буфере
             Buffer = _context.Allocate(g, new Rectangle(0, 0, Width, Height));
             Load();
+            form.KeyDown += Form_KeyDown;
         }
         /// <summary>
         /// колекция объектов
@@ -85,6 +92,14 @@ namespace MyGame
         public static List<Asteroid> _asteroids = new List<Asteroid>();
         public static List<Bullet> _bullet = new List<Bullet>();
 
+
+        public static void Finish()
+        {
+            _timer.Stop();
+            Buffer.Graphics.DrawString("The End", new Font(FontFamily.GenericSansSerif,
+            60, FontStyle.Underline), Brushes.White, 200, 100);
+            Buffer.Render();
+        }
         /// <summary>
         /// создание объектов
         /// </summary>
@@ -104,10 +119,10 @@ namespace MyGame
                 int r = rnd.Next(5, 50);
                 _star.Add(new Star(new Point(1000, rnd.Next(0, Game.Height)), new Point(-r, r), new Size(3, 3)));
             }
-            for (int i = 1; i < 60; i++)
-            {
-                _bullet.Add(new Bullet(new Point(0, i * 20), new Point(5, 0), new Size(8, 2)));
-            }
+            //for (int i = 1; i < 60; i++)
+            //{
+            //    _bullet.Add(new Bullet(new Point(0, i * 20), new Point(5, 0), new Size(8, 2)));
+            //}
         }
         /// <summary>
         /// отрисовка объектов
@@ -116,13 +131,18 @@ namespace MyGame
         {
             Buffer.Graphics.Clear(Color.Black);
             foreach (BaseObject obj in _BG)
-                obj.Draw();
+                obj?.Draw();
             foreach (Asteroid obj in _asteroids)
-                obj.Draw();
+                obj?.Draw();
             foreach (Star obj in _star)
-                obj.Draw();
+                obj?.Draw();
             foreach (Bullet obj in _bullet)
-                obj.Draw();
+                obj?.Draw();
+
+            _ship?.Draw();
+            if (_ship != null)
+                Buffer.Graphics.DrawString("Energy:" + _ship.Energy,
+                SystemFonts.DefaultFont, Brushes.White, 0, 0);
             Buffer.Render();
         }
         /// <summary>
@@ -135,9 +155,9 @@ namespace MyGame
                 obj.Update();
             for (int i = 0; i < _asteroids.Count; i++)
             {
-
-                _asteroids[i].Update();
-                for (int j = 0; j < _bullet.Count; j++)
+                if (_asteroids[i] == null) continue;
+                _asteroids[i]?.Update();
+                for (int j = 0; j < _bullet?.Count; j++)
                 {
                     //3.Сделать так, чтобы при столкновении пули с астероидом они 
                     //регенерировались в разных концах экрана.
@@ -146,14 +166,28 @@ namespace MyGame
                         System.Media.SystemSounds.Hand.Play();
                         int r = rnd.Next(15, 50);
                         _asteroids[i] = new Asteroid(new Point(Game.Width, rnd.Next(0, Game.Height)), new Point(-r / 5, r), new Size(r, r));
-                        _bullet[j] = new Bullet(new Point(0, r * 20), new Point(5, 0), new Size(8, 2));
+ //                       _bullet[j] = new Bullet(new Point(0, r * 20), new Point(5, 0), new Size(8, 2));
+                        _bullet.RemoveAt(j);
+                        continue;
                     }
                 }
+                if (!_ship.Collision(_asteroids[i])) continue;                
+                _ship?.EnergyLow(rnd.Next(1, 10));
+                System.Media.SystemSounds.Asterisk.Play();
+                if (_ship.Energy <= 0) _ship?.Die();
             }
             foreach (Star obj in _star)
-                obj.Update();
+                obj?.Update();
             foreach (Bullet obj in _bullet)
-                obj.Update();
+                obj?.Update();           
         }
+
+        private static void Form_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.ControlKey)
+                _bullet.Add(new Bullet(new Point(_ship.Rect.X + 10, _ship.Rect.Y + 4), new Point(8, 0), new Size(8, 2)));
+            if (e.KeyCode == Keys.Up) _ship.Up();
+            if (e.KeyCode == Keys.Down) _ship.Down();
+        }
     }
 }
