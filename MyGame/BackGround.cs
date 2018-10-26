@@ -8,16 +8,10 @@ using System.Threading.Tasks;
 namespace MyGame
 {
     class BackGround : BaseObject
-    {
-        Image image = Image.FromFile("..\\..\\background.png");
-        public BackGround (Point pos, Point dir, Size size) : base(pos, dir, size) { }
+    {        
+        public BackGround (Point pos, Point dir, Size size) : base(pos, dir, size)
+        { LoadImage("..\\..\\background.png"); }
 
-        public override void Draw()
-        {
-//            Game.Buffer.Graphics.Clear(Color.Black);
-            
-            Game.Buffer.Graphics.DrawImage(image, Pos);
-        }
         /// <summary>
         /// обновелние положения звезды
         /// </summary>

@@ -62,12 +62,12 @@ namespace MyGame
             //(Width, Height) больше 1000 или принимает отрицательное значение, выбросить исключение
             //ArgumentOutOfRangeException().
             if (false)
-            if (form.Width > 1000 || form.Height > 1000)
-            {
-                throw new ArgumentOutOfRangeException();
-            }
+                if (form.Width > 1000 || form.Height > 1000)
+                {
+                    throw new ArgumentOutOfRangeException();
+                }
 
-//            Timer timer = new Timer { Interval = 100 };
+            //            Timer timer = new Timer { Interval = 100 };
             _timer.Start();
             _timer.Tick += Timer_Tick;
             // Графическое устройство для вывода графики
@@ -87,10 +87,14 @@ namespace MyGame
         /// <summary>
         /// колекция объектов
         /// </summary>
+        private static List<BaseObject> _obj;
+        private static List<Asteroid> _asteroids;
+        private static List<Bullet> _bullet;
+
         public static List<BackGround> _BG = new List<BackGround>();
-        public static List<Star> _star = new List<Star>();
-        public static List<Asteroid> _asteroids = new List<Asteroid>();
-        public static List<Bullet> _bullet = new List<Bullet>();
+        //public static List<Star> _star = new List<Star>();
+        //public static List<Asteroid> _asteroids = new List<Asteroid>();
+        //public static List<Bullet> _bullet = new List<Bullet>();
 
 
         public static void Finish()
@@ -105,20 +109,29 @@ namespace MyGame
         /// </summary>
         public static void Load()
         {
+            _obj = new List<BaseObject>();
+            _asteroids = new List<Asteroid>();
+            _bullet = new List<Bullet>();
+
             var rnd = new Random();
 
-            _BG.Add(new BackGround(new Point(0, 0), new Point(-2, -2), new Size(1600, 1000)));
-            _BG.Add(new BackGround(new Point(1600, 0), new Point(-2, -2), new Size(1600, 1000)));
-            for (int i = 0; i < 10; i++)
+
+            int starCount = 200;
+            int asteroidCount = 30;
+            _BG.Add(new BackGround(new Point(0, 0), new Point(-1, -1), new Size(1600, 1000)));
+            _BG.Add(new BackGround(new Point(1600, 0), new Point(-1, -1), new Size(1600, 1000)));
+            for (int i = 0; i < starCount; i++)
             {
-                int r = rnd.Next(5, 50);
-                _asteroids.Add(new Asteroid(new Point(1000, rnd.Next(0, Game.Height)), new Point(-r / 5, r), new Size(r, r)));
+                _obj.Add(new Star());
             }
-            for (int i = 1; i < 30; i++)
+
+            for (int i = 0; i < asteroidCount; i++)
             {
-                int r = rnd.Next(5, 50);
-                _star.Add(new Star(new Point(1000, rnd.Next(0, Game.Height)), new Point(-r, r), new Size(3, 3)));
+                Asteroid asteroid = new Asteroid();
+                _obj.Add(asteroid);
+                _asteroids.Add(asteroid);
             }
+
             //for (int i = 1; i < 60; i++)
             //{
             //    _bullet.Add(new Bullet(new Point(0, i * 20), new Point(5, 0), new Size(8, 2)));
@@ -130,14 +143,21 @@ namespace MyGame
         public static void Draw()
         {
             Buffer.Graphics.Clear(Color.Black);
-            foreach (BaseObject obj in _BG)
+
+            foreach (BackGround obj in _BG)
                 obj?.Draw();
-            foreach (Asteroid obj in _asteroids)
+
+            
+            foreach (BaseObject obj in _obj)
                 obj?.Draw();
-            foreach (Star obj in _star)
-                obj?.Draw();
-            foreach (Bullet obj in _bullet)
-                obj?.Draw();
+
+
+            //foreach (Asteroid obj in _asteroids)
+            //    obj?.Draw();
+            //foreach (Star obj in _star)
+            //    obj?.Draw();
+            //foreach (Bullet obj in _bullet)
+            //    obj?.Draw();
 
             _ship?.Draw();
             if (_ship != null)
@@ -150,36 +170,55 @@ namespace MyGame
         /// </summary>
         public static void Update()
         {
-            Random rnd = new Random();
-            foreach (BaseObject obj in _BG)
+
+            //Random rnd = new Random();
+            //foreach (BaseObject obj in _BG)
+            //    obj.Update();
+            //for (int i = 0; i < _asteroids.Count; i++)
+            //{
+            //    if (_asteroids[i] == null) continue;
+            //    _asteroids[i]?.Update();
+            //    for (int j = 0; j < _bullet?.Count; j++)
+            //    {
+            //        //3.Сделать так, чтобы при столкновении пули с астероидом они 
+            //        //регенерировались в разных концах экрана.
+            //        if (_asteroids[i].Collision(_bullet[j]))
+            //        {
+            //            System.Media.SystemSounds.Hand.Play();
+            //            int r = rnd.Next(15, 50);
+            //            _asteroids[i] = new Asteroid(new Point(Game.Width, rnd.Next(0, Game.Height)), new Point(-r / 5, r), new Size(r, r));
+            //            //                       _bullet[j] = new Bullet(new Point(0, r * 20), new Point(5, 0), new Size(8, 2));
+            //            _bullet.RemoveAt(j);
+            //            continue;
+            //        }
+            //    }
+            //    if (!_ship.Collision(_asteroids[i])) continue;
+            //    _ship?.EnergyLow(rnd.Next(1, 10));
+            //    System.Media.SystemSounds.Asterisk.Play();
+            //    if (_ship.Energy <= 0) _ship?.Die();
+            //}
+            //foreach (Star obj in _star)
+            //    obj?.Update();
+            //foreach (Bullet obj in _bullet)
+            //    obj?.Update();
+            foreach (BackGround obj in _BG)
+                obj?.Update();
+            foreach (BaseObject obj in _obj)
+            {
                 obj.Update();
+            }
             for (int i = 0; i < _asteroids.Count; i++)
             {
-                if (_asteroids[i] == null) continue;
-                _asteroids[i]?.Update();
                 for (int j = 0; j < _bullet?.Count; j++)
                 {
-                    //3.Сделать так, чтобы при столкновении пули с астероидом они 
-                    //регенерировались в разных концах экрана.
-                    if (_asteroids[i].Collision(_bullet[j]))
+                    if (_bullet[j]?.Collision(_asteroids[i]) == true)
                     {
                         System.Media.SystemSounds.Hand.Play();
-                        int r = rnd.Next(15, 50);
-                        _asteroids[i] = new Asteroid(new Point(Game.Width, rnd.Next(0, Game.Height)), new Point(-r / 5, r), new Size(r, r));
- //                       _bullet[j] = new Bullet(new Point(0, r * 20), new Point(5, 0), new Size(8, 2));
-                        _bullet.RemoveAt(j);
-                        continue;
+                        _asteroids[i] = new Asteroid();
                     }
                 }
-                if (!_ship.Collision(_asteroids[i])) continue;                
-                _ship?.EnergyLow(rnd.Next(1, 10));
-                System.Media.SystemSounds.Asterisk.Play();
-                if (_ship.Energy <= 0) _ship?.Die();
             }
-            foreach (Star obj in _star)
-                obj?.Update();
-            foreach (Bullet obj in _bullet)
-                obj?.Update();           
+
         }
 
         private static void Form_KeyDown(object sender, KeyEventArgs e)
@@ -188,6 +227,7 @@ namespace MyGame
                 _bullet.Add(new Bullet(new Point(_ship.Rect.X + 10, _ship.Rect.Y + 4), new Point(8, 0), new Size(8, 2)));
             if (e.KeyCode == Keys.Up) _ship.Up();
             if (e.KeyCode == Keys.Down) _ship.Down();
-        }
+        }
+
     }
 }

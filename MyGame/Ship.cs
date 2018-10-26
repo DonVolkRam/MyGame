@@ -33,6 +33,7 @@ namespace MyGame
         public void Die()
         {
             MessageDie?.Invoke();
-        }
+        }
+
     }
-}
+}

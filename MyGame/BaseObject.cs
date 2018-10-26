@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Drawing;
 namespace MyGame
-{    
+{
     interface ICollision
     {
         bool Collision(ICollision obj);
@@ -29,11 +29,19 @@ namespace MyGame
         /// <summary>
         /// Случайное значение
         /// </summary>
-        protected Random rnd = new Random();
+        protected static Random Rnd;
         /// <summary>
-        /// Случайнок направление
+        /// Случайное направление
         /// </summary>
         private int rndDir;
+
+        protected Image Img;
+
+        static BaseObject()
+        {
+            Rnd = new Random();
+        }
+
         /// <summary>
         /// Конструкктор базового объекта
         /// </summary>
@@ -45,7 +53,7 @@ namespace MyGame
             Pos = pos;
             Dir = dir;
             Size = size;
-           
+
         }
         /// <summary>
         /// Конструкктор базового объекта
@@ -55,19 +63,42 @@ namespace MyGame
         protected BaseObject(Point pos, Size size)
         {
             Pos = pos;
-            Dir = new Point(rnd.Next(-10, 10), rnd.Next(-10, 10));
+            Dir = new Point(Rnd.Next(-10, 10), Rnd.Next(-10, 10));
             Size = size;
 
         }
-        public delegate void Message();
+
+        public BaseObject()
+        {
+            Pos = new Point(Convert.ToInt32(Rnd.NextDouble() * Game.Width),
+                            (Convert.ToInt32(Rnd.NextDouble() * Game.Height)));
+            Dir = new Point(Convert.ToInt32(Rnd.NextDouble() * 10) - 11,
+                            Convert.ToInt32(Rnd.NextDouble() * 10) - 11);
+            Size = new Size(10, 10);
+            
+        }
+
+        public delegate void Message();
+
+        protected void LoadImage(string fileName)
+        {
+            Img = Image.FromFile(fileName);
+        }
+
         /// <summary>
         /// получение случаного значения направвления
         /// </summary>
-        public int RndDir { get => rnd.Next(-10, 10); set => rndDir = value; }
+        public int RndDir { get => Rnd.Next(-10, 10); set => rndDir = value; }
         /// <summary>
         /// опичатель отрисовки
         /// </summary>
-        public abstract void Draw();
+        public virtual void Draw()
+        {
+            if (Img != null)
+                Game.Buffer.Graphics.DrawImage(Img, Pos.X, Pos.Y, Size.Width, Size.Height);
+            else
+                Game.Buffer.Graphics.DrawEllipse(Pens.White, Pos.X, Pos.Y, Size.Width, Size.Height);
+        }
         /// <summary>
         /// описатель обновления объекта
         /// </summary>
