@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 namespace MyGame
 {
     class Asteroid : BaseObject
-    {        
+    {
+        private int MinSize = 15;
         public int Power { get; set; }
         /// <summary>
         /// Конструкктор объекта астероида
@@ -32,6 +33,26 @@ namespace MyGame
             Power = 1;
         }
 
+        public Asteroid(bool xaoc) : base()
+        {
+            ChoseRandomImage();
+            Power = 1;
+            if (xaoc)
+                Pos = new Point(Rnd.Next(Game.Width/3, Game.Width), Convert.ToInt32(Rnd.NextDouble() * Game.Height));
+           else
+                Pos = new Point(Game.Width, Rnd.Next(0, Game.Height));
+
+            Dir.X /= 2;
+            Dir.Y /= 2;
+            Size.Width *= Math.Abs(Dir.X);
+            Size.Height *= Math.Abs(Dir.X);
+            if(Size.Width< MinSize || Size.Height< MinSize)
+            {
+                Size.Width = MinSize;
+                Size.Height = MinSize;
+            }
+        }
+
         void ChoseRandomImage()
         {
             int n = Rnd.Next() % 4;
@@ -41,17 +62,8 @@ namespace MyGame
                 case 0: LoadImage("..\\..\\asteroid_1.png"); break;
                 case 1: LoadImage("..\\..\\asteroid_2.png"); break;
                 case 2: LoadImage("..\\..\\asteroid_3.png"); break;
-                case 3: LoadImage("..\\..\\asteroid_4.png"); break;                
+                case 3: LoadImage("..\\..\\asteroid_4.png"); break;
             }
-        }
-        public Asteroid() : base()
-        {
-            ChoseRandomImage();
-            Power = 1;
-            Dir.X /= 2;
-            Dir.Y /= 2;
-            Size.Width *= Dir.X;
-            Size.Height *= Dir.X;
         }
         /// <summary>
         /// обновление положения астероида

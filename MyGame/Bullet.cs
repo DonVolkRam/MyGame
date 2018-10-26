@@ -16,7 +16,6 @@ namespace MyGame
         public Bullet(Point pos, Point dir, Size size) : base(pos, dir, size)
         {
         }
-
         /// <summary>
         /// Отрисовка пули
         /// </summary>
@@ -30,7 +29,7 @@ namespace MyGame
         /// </summary>
         public override void Update()
         {
-            Pos.X = Pos.X + 3;
+            Pos.X = Pos.X + Dir.X;
         }
     }
 

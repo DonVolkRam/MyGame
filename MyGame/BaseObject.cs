@@ -31,12 +31,13 @@ namespace MyGame
         /// </summary>
         protected static Random Rnd;
         /// <summary>
-        /// Случайное направление
+        /// Изображение объекта
         /// </summary>
-        private int rndDir;
-
         protected Image Img;
 
+        /// <summary>
+        /// создание статических переменных
+        /// </summary>
         static BaseObject()
         {
             Rnd = new Random();
@@ -67,28 +68,26 @@ namespace MyGame
             Size = size;
 
         }
-
+        /// <summary>
+        /// Конструктор создающщий объект в случайном месте
+        /// </summary>
         public BaseObject()
         {
-            Pos = new Point(Convert.ToInt32(Rnd.NextDouble() * Game.Width),
+            Pos = new Point(Rnd.Next(0, Game.Width),
                             (Convert.ToInt32(Rnd.NextDouble() * Game.Height)));
             Dir = new Point(Convert.ToInt32(Rnd.NextDouble() * 10) - 11,
                             Convert.ToInt32(Rnd.NextDouble() * 10) - 11);
             Size = new Size(10, 10);
             
         }
-
-        public delegate void Message();
-
+        /// <summary>
+        /// Метод загрузки изображения по имени файла
+        /// </summary>
+        /// <param name="fileName">имя файла</param>
         protected void LoadImage(string fileName)
         {
             Img = Image.FromFile(fileName);
         }
-
-        /// <summary>
-        /// получение случаного значения направвления
-        /// </summary>
-        public int RndDir { get => Rnd.Next(-10, 10); set => rndDir = value; }
         /// <summary>
         /// опичатель отрисовки
         /// </summary>
@@ -103,7 +102,15 @@ namespace MyGame
         /// описатель обновления объекта
         /// </summary>
         public abstract void Update();
-
+        /// <summary>
+        /// сообзение
+        /// </summary>
+        public delegate void Message();
+        /// <summary>
+        /// Интерфейс определяющий пересечение объектов
+        /// </summary>
+        /// <param name="o">объект с которым пересекся текущий</param>
+        /// <returns></returns>
         public bool Collision(ICollision o) => o.Rect.IntersectsWith(this.Rect);
         public Rectangle Rect => new Rectangle(Pos, Size);
     }
