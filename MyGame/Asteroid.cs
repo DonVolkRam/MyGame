@@ -10,7 +10,6 @@ namespace MyGame
     class Asteroid : BaseObject
     {        
         public int Power { get; set; }
-        string sImg = "..\\..\\asteroid.bmp";
         /// <summary>
         /// Конструкктор объекта астероида
         /// </summary>
@@ -19,7 +18,7 @@ namespace MyGame
         /// <param name="size">размер объекта</param>
         public Asteroid(Point pos, Point dir, Size size) : base(pos, dir, size)
         {
-            LoadImage(sImg);
+            ChoseRandomImage();
             Power = 1;
         }
         /// <summary>
@@ -29,14 +28,28 @@ namespace MyGame
         /// <param name="size">размер</param>
         public Asteroid(Point pos, Size size) : base(pos, size)
         {
-            LoadImage(sImg);
+            ChoseRandomImage();
             Power = 1;
         }
 
+        void ChoseRandomImage()
+        {
+            int n = Rnd.Next() % 4;
+
+            switch (n)
+            {
+                case 0: LoadImage("..\\..\\asteroid_1.png"); break;
+                case 1: LoadImage("..\\..\\asteroid_2.png"); break;
+                case 2: LoadImage("..\\..\\asteroid_3.png"); break;
+                case 3: LoadImage("..\\..\\asteroid_4.png"); break;                
+            }
+        }
         public Asteroid() : base()
         {
-            LoadImage(sImg);
+            ChoseRandomImage();
             Power = 1;
+            Dir.X /= 2;
+            Dir.Y /= 2;
             Size.Width *= Dir.X;
             Size.Height *= Dir.X;
         }
