@@ -9,6 +9,14 @@ namespace MyGame
         Rectangle Rect { get; }
     }
 
+    //public enum MyEnum
+    //{
+    //    CREATE,
+    //    DESTROY,
+    //    APPLY,
+    //    MOVE,
+    //    FIRE
+    //}
     /// <summary>
     /// Класс описатель базового объекта
     /// </summary>
@@ -68,6 +76,51 @@ namespace MyGame
             Size = size;
 
         }
+
+        //public void WriteToConsole(MyEnum MES)
+        //{
+        //    switch (MES)
+        //    {
+        //        case MyEnum.CREATE:
+        //            Console.WriteLine($"создан объект  -  {this}"); break;
+        //        case MyEnum.DESTROY:
+        //            Console.WriteLine($"уничтожен объект - {this}"); break;
+        //        case MyEnum.FIRE:
+        //            Console.WriteLine($"{this}  -  произвел выстрел "); break;
+        //        case MyEnum.MOVE:
+        //            Console.WriteLine($"{this}  -  переместился "); break;
+        //        case MyEnum.APPLY:
+        //            Console.WriteLine($"{this}  -  применил аптечку"); break;
+        //        default:
+        //            break;
+        //    }
+        //}
+
+
+        /// <summary>
+        /// Методы вывода событий
+        /// </summary>
+        public void WriteCREATE()
+        {
+            Console.WriteLine($"создан объект  -  {this}");
+        }
+        public void WriteDESTROY()
+        {
+            Console.WriteLine($"уничтожен объект  - = {this}");
+        }
+        public void WriteFIRE()
+        {
+            Console.WriteLine($"{this}  -  произвел выстрел ");
+        }
+        public void WriteMOVE()
+        {
+            Console.WriteLine($"{this}  -  переместился ");
+        }
+        public void WriteAPPLY()
+        {
+            Console.WriteLine($"{this}  -  применил аптечку");
+        }
+
         /// <summary>
         /// Конструктор создающщий объект в случайном месте
         /// </summary>
@@ -78,7 +131,7 @@ namespace MyGame
             Dir = new Point(Convert.ToInt32(Rnd.NextDouble() * 10) - 11,
                             Convert.ToInt32(Rnd.NextDouble() * 10) - 11);
             Size = new Size(10, 10);
-            
+
         }
         /// <summary>
         /// Метод загрузки изображения по имени файла

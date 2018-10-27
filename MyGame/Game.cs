@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Collections.Generic;
 
 namespace MyGame
-{
+{   
     /// <summary>
     /// 
     /// </summary>
@@ -31,6 +31,8 @@ namespace MyGame
         /// </summary>
         public static int Score { get; set; }
 
+        public static Journal _journal = new Journal();
+        
         /// <summary>
         /// констркутор
         /// </summary>
@@ -38,7 +40,6 @@ namespace MyGame
         {
         }
         private static Ship _ship;
-
         /// <summary>
         /// интервал оновления
         /// </summary>
@@ -186,7 +187,8 @@ namespace MyGame
                     {
                         System.Media.SystemSounds.Hand.Play();
                         if (_asteroids[i].DecreasePower())
-                        {
+                        {                            
+                            _journal.Write += _asteroids[i].WriteDESTROY;
                             _asteroids[i] = new Asteroid(false);
                             Score++;
                         }
@@ -208,7 +210,8 @@ namespace MyGame
                 {
                     if (_ship.Collision(_kit[j]))
                     {
-                        System.Media.SystemSounds.Exclamation.Play();
+                        System.Media.SystemSounds.Exclamation.Play();                        
+                        _journal.Write += _ship.WriteAPPLY;
                         _kit[j].Heal(ref _ship);
                         _kit[j] = new Medicine();
                         //_kit.RemoveAt(i);
@@ -221,6 +224,7 @@ namespace MyGame
                     Finish();
                 }
             }
+            _journal.Start();
         }
         /// <summary>
         /// метод обработки нажатия стрелочных клавиш и контрола
@@ -233,11 +237,17 @@ namespace MyGame
             {
                 System.Media.SystemSounds.Beep.Play();
                 _bullet.Add(new Bullet(new Point(_ship.Rect.X + 30, _ship.Rect.Y + 8), new Point(16, 0), new Size(8, 2)));
+                _journal.Write += _ship.WriteFIRE;
+            }
+            else
+            {
+                _journal.Write += _ship.WriteMOVE;               
             }
             if (e.KeyCode == Keys.Up) _ship.Up();
             if (e.KeyCode == Keys.Down) _ship.Down();
             if (e.KeyCode == Keys.Right) _ship.Right();
             if (e.KeyCode == Keys.Left) _ship.Left();
+
         }
 
     }
