@@ -27,6 +27,11 @@ namespace MyGame
         /// </summary>
         public static int Height { get; set; }
         /// <summary>
+        /// очки за астероиды
+        /// </summary>
+        public static int Score { get; set; }
+
+        /// <summary>
         /// констркутор
         /// </summary>
         static Game()
@@ -55,6 +60,7 @@ namespace MyGame
         public static void Init(Form form)
         {
             //Timer timer = new Timer { Interval = 100 };
+            Score = 0;
             _timer.Start();
             _timer.Tick += Timer_Tick;
             // Графическое устройство для вывода графики
@@ -78,6 +84,7 @@ namespace MyGame
         private static List<Asteroid> _asteroids;
         private static List<Bullet> _bullet;
         public static List<BackGround> _BG;
+        public static List<Medicine> _kit;
         //public static List<Star> _star = new List<Star>();
 
         /// <summary>
@@ -99,6 +106,7 @@ namespace MyGame
             _obj = new List<BaseObject>();
             _asteroids = new List<Asteroid>();
             _bullet = new List<Bullet>();
+            _kit = new List<Medicine>();
 
             _ship = new Ship(new Point(10, 400), new Point(10, 10), new Size(160, 50));
 
@@ -106,15 +114,17 @@ namespace MyGame
 
             int starCount = 200;
             int asteroidCount = 30;
+            int kitCount = 5;
             _BG.Add(new BackGround(new Point(0, 0), new Point(-1, -1), new Size(1600, 1000)));
             _BG.Add(new BackGround(new Point(1600, 0), new Point(-1, -1), new Size(1600, 1000)));
-            _BG.Add(new Cloud(new Point(0, 0), new Point(-2, -2), new Size(1600, 1000), 1));
-            _BG.Add(new Cloud(new Point(1600, 0), new Point(-2, -2), new Size(1600, 1000), 2));
+            //            _BG.Add(new Cloud(new Point(0, 0), new Point(-2, -2), new Size(1600, 1000), 1));
+            //            _BG.Add(new Cloud(new Point(1600, 0), new Point(-2, -2), new Size(1600, 1000), 2));
             for (int i = 0; i < starCount; i++)
                 _obj.Add(new Star());
-            for (int i = 0; i < asteroidCount; i++)            
+            for (int i = 0; i < asteroidCount; i++)
                 _asteroids.Add(new Asteroid(true));
-
+            for (int i = 0; i < kitCount; i++)
+                _kit.Add(new Medicine());
             //for (int i = 1; i < 60; i++)
             //{
             //    _bullet.Add(new Bullet(new Point(0, i * 20), new Point(5, 0), new Size(8, 2)));
@@ -135,12 +145,19 @@ namespace MyGame
                 obj?.Draw();
             foreach (Bullet obj in _bullet)
                 obj?.Draw();
+            foreach (Medicine obj in _kit)
+                obj?.Draw();
             //foreach (Star obj in _star)
             //    obj?.Draw();
             _ship?.Draw();
             if (_ship != null)
+            {
+                Buffer.Graphics.DrawString("Score:" + Score,
+                                SystemFonts.DefaultFont, Brushes.White, 0, 20);
+
                 Buffer.Graphics.DrawString("Energy:" + _ship.Energy,
                 SystemFonts.DefaultFont, Brushes.White, 0, 0);
+            }
             Buffer.Render();
         }
         /// <summary>
@@ -149,7 +166,7 @@ namespace MyGame
         public static void Update()
         {
             Random rnd = new Random();
-            
+
             foreach (BackGround obj in _BG)
                 obj?.Update();
             foreach (BaseObject obj in _obj)
@@ -157,9 +174,9 @@ namespace MyGame
             foreach (Asteroid obj in _asteroids)
                 obj.Update();
             foreach (Bullet obj in _bullet)
-            {
                 obj.Update();
-            }
+            foreach (Medicine obj in _kit)
+                obj?.Update();
             for (int i = 0; i < _asteroids.Count; i++)
             {
                 for (int j = 0; j < _bullet?.Count; j++)
@@ -168,18 +185,40 @@ namespace MyGame
                     if (_asteroids[i].Collision(_bullet[j]))
                     {
                         System.Media.SystemSounds.Hand.Play();
-                        _asteroids[i] = new Asteroid(false);
+                        if (_asteroids[i].DecreasePower())
+                        {
+                            _asteroids[i] = new Asteroid(false);
+                            Score++;
+                        }
                         _bullet.RemoveAt(j);
+                        
                         continue;
                     }
+                    if (_bullet[j].OutofScreen())
+                        _bullet.RemoveAt(j);
                 }
-                if (!_ship.Collision(_asteroids[i])) continue;
-                _ship?.EnergyLow(rnd.Next(1, 10));
-                System.Media.SystemSounds.Asterisk.Play();
+                if (_ship.Collision(_asteroids[i]))
+                {
+                    if (_asteroids[i].DecreasePower())
+                        _asteroids[i] = new Asteroid(false);                       
+                    System.Media.SystemSounds.Asterisk.Play();
+                    _ship?.EnergyLow(rnd.Next(1, 10));
+                }
+                for (int j = 0; j < _kit?.Count; j++)
+                {
+                    if (_ship.Collision(_kit[j]))
+                    {
+                        System.Media.SystemSounds.Exclamation.Play();
+                        _kit[j].Heal(ref _ship);
+                        _kit[j] = new Medicine();
+                        //_kit.RemoveAt(i);
+                    }
+                }
                 if (_ship.Energy <= 0)
                 {
-                    System.Media.SystemSounds.Exclamation.Play();
+                    //                    System.Media.SystemSounds.Exclamation.Play();
                     _ship?.Die();
+                    Finish();
                 }
             }
         }
@@ -192,10 +231,8 @@ namespace MyGame
         {
             if (e.KeyCode == Keys.ControlKey)
             {
-                Bullet tempBullet = new Bullet(new Point(_ship.Rect.X + 30, _ship.Rect.Y + 8), new Point(16, 0), new Size(8, 2));
                 System.Media.SystemSounds.Beep.Play();
-                _bullet.Add(tempBullet);
-                //             _obj.Add(tempBullet);
+                _bullet.Add(new Bullet(new Point(_ship.Rect.X + 30, _ship.Rect.Y + 8), new Point(16, 0), new Size(8, 2)));
             }
             if (e.KeyCode == Keys.Up) _ship.Up();
             if (e.KeyCode == Keys.Down) _ship.Down();

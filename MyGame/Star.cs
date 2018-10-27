@@ -45,7 +45,6 @@ namespace MyGame
                 case 2: LoadImage("..\\..\\star_b.png"); break;
                 case 3: LoadImage("..\\..\\star_r.png"); break;
                 default: LoadImage("..\\..\\star_w.png"); break;
-
             }
         }
         /// <summary>

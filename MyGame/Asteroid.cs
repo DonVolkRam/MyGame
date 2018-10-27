@@ -20,7 +20,8 @@ namespace MyGame
         public Asteroid(Point pos, Point dir, Size size) : base(pos, dir, size)
         {
             ChoseRandomImage();
-            Power = 1;
+            setPowerBySize();
+
         }
         /// <summary>
         /// Конструкктор объекта астероида
@@ -30,13 +31,13 @@ namespace MyGame
         public Asteroid(Point pos, Size size) : base(pos, size)
         {
             ChoseRandomImage();
-            Power = 1;
+            setPowerBySize();
         }
 
         public Asteroid(bool xaoc) : base()
         {
             ChoseRandomImage();
-            Power = 1;
+            
             if (xaoc)
                 Pos = new Point(Rnd.Next(Game.Width/3, Game.Width), Convert.ToInt32(Rnd.NextDouble() * Game.Height));
            else
@@ -51,8 +52,11 @@ namespace MyGame
                 Size.Width = MinSize;
                 Size.Height = MinSize;
             }
+            setPowerBySize();
         }
-
+        /// <summary>
+        /// метод выбора случайного изображения
+        /// </summary>
         void ChoseRandomImage()
         {
             int n = Rnd.Next() % 4;
@@ -84,6 +88,29 @@ namespace MyGame
                 Dir.X = -Dir.X;
             else if (Pos.Y < 0 || Pos.Y > Game.Height)
                 Dir.Y = -Dir.Y;
-        }               
+        } 
+        /// <summary>
+        /// метод установки прочности астероида исходя из его размера
+        /// </summary>
+        private void setPowerBySize()
+        {
+            if (Size.Height < 20)
+                Power = 1;
+            else if (Size.Height >= 20 && Size.Height < 30)
+                Power = 2;
+            else
+                Power = 3;
+        }
+        /// <summary>
+        /// метод понижения прочности астероида
+        /// </summary>
+        /// <returns>возращает истину когда астероид уничтожен</returns>
+        public bool DecreasePower()
+        {
+            this.Power--;
+            if (Power <= 0)
+                return true;
+            return false;
+        }
     }
 }

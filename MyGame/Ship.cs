@@ -3,18 +3,15 @@ namespace MyGame
 {
     class Ship : BaseObject
     {
-/// <summary>
-/// начальное значение жизней
-/// </summary>
+        /// <summary>
+        /// начальное значение жизней
+        /// </summary>
         private int _energy = 100;
-
-
         /// <summary>
         /// путь к изображению
         /// </summary>
         string ImgName = "..\\..\\ship.png";
         public int Energy => _energy;
-
         /// <summary>
         /// метод понижения количества жизней
         /// </summary>
@@ -22,6 +19,11 @@ namespace MyGame
         public void EnergyLow(int n)
         {
             _energy -= n;
+        }
+        public void EnergyHight(int n)
+        {
+            _energy += n;
+            if (_energy > 100) _energy = 100;
         }
         /// <summary>
         /// Конструктор корабля
@@ -41,7 +43,6 @@ namespace MyGame
         //        Game.Buffer.Graphics.DrawImage(Img, Pos.X, Pos.Y, Size.Width, Size.Height);
         //        Game.Buffer.Graphics.DrawRectangle(Pens.White, Pos.X, Pos.Y, Size.Width, Size.Height);
         //}
-
         public override void Update()
         {
         }
