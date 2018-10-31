@@ -33,7 +33,10 @@ namespace MyGame
             ChoseRandomImage();
             setPowerBySize();
         }
-
+        /// <summary>
+        /// Создает объект в случайном месте на экране
+        /// </summary>
+        /// <param name="xaoc">если истина создает в 2 третях экрана, если ложь то создает в начале экрана</param>
         public Asteroid(bool xaoc) : base()
         {
             ChoseRandomImage();

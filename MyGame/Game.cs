@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Collections.Generic;
 
 namespace MyGame
-{   
+{
     /// <summary>
     /// 
     /// </summary>
@@ -32,7 +32,7 @@ namespace MyGame
         public static int Score { get; set; }
 
         public static Journal _journal = new Journal();
-        
+
         /// <summary>
         /// констркутор
         /// </summary>
@@ -96,6 +96,8 @@ namespace MyGame
             _timer.Stop();
             Buffer.Graphics.DrawString("The End", new Font(FontFamily.GenericSansSerif,
             60, FontStyle.Underline), Brushes.White, 200, 100);
+            Buffer.Graphics.DrawString($"Your Score {Score}", new Font(FontFamily.GenericSansSerif,
+            60, FontStyle.Underline), Brushes.White, 200, 200);
             Buffer.Render();
         }
         /// <summary>
@@ -118,8 +120,8 @@ namespace MyGame
             int kitCount = 5;
             _BG.Add(new BackGround(new Point(0, 0), new Point(-1, -1), new Size(1600, 1000)));
             _BG.Add(new BackGround(new Point(1600, 0), new Point(-1, -1), new Size(1600, 1000)));
-            _BG.Add(new Cloud(new Point(0, 0), new Point(-2, -2), new Size(1600, 1000), 1));
-            _BG.Add(new Cloud(new Point(1600, 0), new Point(-2, -2), new Size(1600, 1000), 2));
+            //            _BG.Add(new Cloud(new Point(0, 0), new Point(-2, -2), new Size(1600, 1000), 1));
+            //            _BG.Add(new Cloud(new Point(1600, 0), new Point(-2, -2), new Size(1600, 1000), 2));
             for (int i = 0; i < starCount; i++)
                 _obj.Add(new Star());
             for (int i = 0; i < asteroidCount; i++)
@@ -167,7 +169,8 @@ namespace MyGame
         public static void Update()
         {
             Random rnd = new Random();
-
+            bool Bcontinue = true;
+            int AsteroidCount = _asteroids.Count;
             foreach (BackGround obj in _BG)
                 obj?.Update();
             foreach (BaseObject obj in _obj)
@@ -178,51 +181,77 @@ namespace MyGame
                 obj.Update();
             foreach (Medicine obj in _kit)
                 obj?.Update();
-            for (int i = 0; i < _asteroids.Count; i++)
+            //задание 4 создание астероидов на 1 больше после их уничтожения
+            if (_asteroids.Count != 0)
             {
-                for (int j = 0; j < _bullet?.Count; j++)
+                for (int i = 0; i < _asteroids?.Count  && Bcontinue; i++)
                 {
-                    //if (_bullet[j].Collision(_asteroids[i]))
-                    if (_asteroids[i].Collision(_bullet[j]))
+                    for (int j = 0; j < _bullet?.Count; j++)
                     {
-                        System.Media.SystemSounds.Hand.Play();
-                        if (_asteroids[i].DecreasePower())
-                        {                            
-                            _journal.Write += _asteroids[i].WriteDESTROY;
-                            _asteroids[i] = new Asteroid(false);
-                            Score++;
+                        //if (_bullet[j].Collision(_asteroids[i]))
+                        if (_asteroids[i].Collision(_bullet[j]))
+                        {
+                            System.Media.SystemSounds.Hand.Play();
+                            if (_asteroids[i].DecreasePower())
+                            {
+                                _journal.Write += _asteroids[i].WriteDESTROY;
+                                _asteroids.RemoveAt(i);
+                                _bullet.RemoveAt(j);
+                                //_asteroids[i] = new Asteroid(false);
+                                Score++;
+                                Bcontinue = false;
+                                break;
+                            }
+                            else
+                            {
+                                _bullet.RemoveAt(j);
+                                Bcontinue = false;
+                                break;
+                            }
                         }
-                        _bullet.RemoveAt(j);
-                        
-                        continue;
+                        if (_bullet[j].OutofScreen())
+                        {
+                            _bullet.RemoveAt(j);
+                            Bcontinue = false;
+                            break;
+                        }                        
                     }
-                    if (_bullet[j].OutofScreen())
-                        _bullet.RemoveAt(j);
-                }
-                if (_ship.Collision(_asteroids[i]))
-                {
-                    if (_asteroids[i].DecreasePower())
-                        _asteroids[i] = new Asteroid(false);                       
-                    System.Media.SystemSounds.Asterisk.Play();
-                    _ship?.EnergyLow(rnd.Next(1, 10));
-                }
-                for (int j = 0; j < _kit?.Count; j++)
-                {
-                    if (_ship.Collision(_kit[j]))
+                    if (_ship.Collision(_asteroids[i]))
                     {
-                        System.Media.SystemSounds.Exclamation.Play();                        
-                        _journal.Write += _ship.WriteAPPLY;
-                        _kit[j].Heal(ref _ship);
-                        _kit[j] = new Medicine();
-                        //_kit.RemoveAt(i);
+                        if (_asteroids[i].DecreasePower())
+                        {
+                            _asteroids.RemoveAt(i);
+                            //_asteroids[i] = new Asteroid(false);
+                            System.Media.SystemSounds.Asterisk.Play();
+                            _ship?.EnergyLow(rnd.Next(1, 10));
+                            Bcontinue = false;
+                            break;
+                        }
                     }
                 }
-                if (_ship.Energy <= 0)
+            }
+            else
+            {
+                AsteroidCount++;
+                for (int i = 0; i < AsteroidCount; i++)
+                    _asteroids.Add(new Asteroid(false));
+            }
+            for (int j = 0; j < _kit?.Count; j++)
+            {
+                if (_ship.Collision(_kit[j]))
                 {
-                    //                    System.Media.SystemSounds.Exclamation.Play();
-                    _ship?.Die();
-                    Finish();
+                    System.Media.SystemSounds.Exclamation.Play();
+                    _journal.Write += _ship.WriteAPPLY;
+                    _kit[j].Heal(ref _ship);
+                    _kit[j] = new Medicine();
+                    //_kit.RemoveAt(i);
                 }
+            }
+            if (_ship.Energy <= 0)
+            {
+                //                    System.Media.SystemSounds.Exclamation.Play();
+                _ship?.Die();
+                Finish();
             }
             _journal.Start();
         }
@@ -233,6 +262,8 @@ namespace MyGame
         /// <param name="e"></param>
         private static void Form_KeyDown(object sender, KeyEventArgs e)
         {
+            _bullet.Add(new Bullet(new Point(_ship.Rect.X + 30, _ship.Rect.Y + 8), new Point(16, 0), new Size(8, 2)));
+
             if (e.KeyCode == Keys.ControlKey)
             {
                 System.Media.SystemSounds.Beep.Play();
@@ -241,14 +272,12 @@ namespace MyGame
             }
             else
             {
-                _journal.Write += _ship.WriteMOVE;               
+                _journal.Write += _ship.WriteMOVE;
             }
             if (e.KeyCode == Keys.Up) _ship.Up();
             if (e.KeyCode == Keys.Down) _ship.Down();
             if (e.KeyCode == Keys.Right) _ship.Right();
             if (e.KeyCode == Keys.Left) _ship.Left();
-
         }
-
     }
 }
