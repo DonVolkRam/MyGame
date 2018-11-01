@@ -31,6 +31,8 @@ namespace MyGame
         /// </summary>
         public static int Score { get; set; }
 
+        public static int AsteroidCount { get; set; }
+
         public static Journal _journal = new Journal();
 
         /// <summary>
@@ -99,6 +101,8 @@ namespace MyGame
             Buffer.Graphics.DrawString($"Your Score {Score}", new Font(FontFamily.GenericSansSerif,
             60, FontStyle.Underline), Brushes.White, 200, 200);
             Buffer.Render();
+            Greetings Gre = new Greetings();
+            Gre.ShowDialog();
         }
         /// <summary>
         /// создание объектов
@@ -116,18 +120,18 @@ namespace MyGame
             var rnd = new Random();
 
             int starCount = 200;
-            int asteroidCount = 30;
+            int asteroidCount = AsteroidCount = 20;
             int kitCount = 5;
             _BG.Add(new BackGround(new Point(0, 0), new Point(-1, -1), new Size(1600, 1000)));
             _BG.Add(new BackGround(new Point(1600, 0), new Point(-1, -1), new Size(1600, 1000)));
-            //            _BG.Add(new Cloud(new Point(0, 0), new Point(-2, -2), new Size(1600, 1000), 1));
-            //            _BG.Add(new Cloud(new Point(1600, 0), new Point(-2, -2), new Size(1600, 1000), 2));
+            //_BG.Add(new Cloud(new Point(0, 0), new Point(-2, -2), new Size(1600, 1000), 1));
+            //_BG.Add(new Cloud(new Point(1600, 0), new Point(-2, -2), new Size(1600, 1000), 2));
             for (int i = 0; i < starCount; i++)
                 _obj.Add(new Star());
             for (int i = 0; i < asteroidCount; i++)
                 _asteroids.Add(new Asteroid(true));
             for (int i = 0; i < kitCount; i++)
-                _kit.Add(new Medicine());
+                _kit.Add(new Medicine()); 
             //for (int i = 1; i < 60; i++)
             //{
             //    _bullet.Add(new Bullet(new Point(0, i * 20), new Point(5, 0), new Size(8, 2)));
@@ -139,7 +143,6 @@ namespace MyGame
         public static void Draw()
         {
             Buffer.Graphics.Clear(Color.Black);
-
             foreach (BackGround obj in _BG)
                 obj?.Draw();
             foreach (BaseObject obj in _obj)
@@ -170,7 +173,6 @@ namespace MyGame
         {
             Random rnd = new Random();
             bool Bcontinue = true;
-            int AsteroidCount = _asteroids.Count;
             foreach (BackGround obj in _BG)
                 obj?.Update();
             foreach (BaseObject obj in _obj)
@@ -184,12 +186,12 @@ namespace MyGame
             //задание 4 создание астероидов на 1 больше после их уничтожения
             if (_asteroids.Count != 0)
             {
-                for (int i = 0; i < _asteroids?.Count  && Bcontinue; i++)
+                for (int i = 0; i < _asteroids?.Count && Bcontinue; i++)
                 {
                     for (int j = 0; j < _bullet?.Count; j++)
                     {
-                        //if (_bullet[j].Collision(_asteroids[i]))
-                        if (_asteroids[i].Collision(_bullet[j]))
+                        if (_bullet[j].Collision(_asteroids[i]))
+                        //                        if (_asteroids[i].Collision(_bullet[j]))
                         {
                             System.Media.SystemSounds.Hand.Play();
                             if (_asteroids[i].DecreasePower())
@@ -212,10 +214,12 @@ namespace MyGame
                         if (_bullet[j].OutofScreen())
                         {
                             _bullet.RemoveAt(j);
-                            Bcontinue = false;
-                            break;
-                        }                        
+                            //Bcontinue = false;
+                            //break;
+                        }
                     }
+                    if (Bcontinue == false)
+                        break;
                     if (_ship.Collision(_asteroids[i]))
                     {
                         if (_asteroids[i].DecreasePower())
@@ -223,11 +227,13 @@ namespace MyGame
                             _asteroids.RemoveAt(i);
                             //_asteroids[i] = new Asteroid(false);
                             System.Media.SystemSounds.Asterisk.Play();
-                            _ship?.EnergyLow(rnd.Next(1, 10));
+                            _ship?.EnergyLow(rnd.Next(10, 20));
                             Bcontinue = false;
                             break;
                         }
                     }
+                    if (Bcontinue == false)
+                        break;
                 }
             }
             else
@@ -262,7 +268,7 @@ namespace MyGame
         /// <param name="e"></param>
         private static void Form_KeyDown(object sender, KeyEventArgs e)
         {
-            _bullet.Add(new Bullet(new Point(_ship.Rect.X + 30, _ship.Rect.Y + 8), new Point(16, 0), new Size(8, 2)));
+            //_bullet.Add(new Bullet(new Point(_ship.Rect.X + 30, _ship.Rect.Y + 8), new Point(16, 0), new Size(8, 2)));
 
             if (e.KeyCode == Keys.ControlKey)
             {
