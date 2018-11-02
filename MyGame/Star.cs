@@ -23,6 +23,22 @@ namespace MyGame
         /// <param name="size">размер объекта</param>
         public Star(Point pos, Size size) : base(pos, size) { ChoseRandomImage(); }
 
+        static Star()
+        {
+            Rnd = new Random();
+        }
+
+        public Star(int a) : base(a)
+        {
+            ChoseRandomImage();
+            Dir.X /= 2;
+
+
+            Size.Width *= Dir.X;
+            Size.Height *= Dir.X;
+            Size.Width *= -1;
+            Size.Height *= -1;
+        }
         public Star() : base()
         {
             ChoseRandomImage();
@@ -54,6 +70,13 @@ namespace MyGame
         {
             Pos.X = Pos.X + Dir.X;
             if (Pos.X < -Size.Width) Pos.X = Game.Width + Size.Width;
+            //            if (Pos.X > Game.Width) Dir.X = -Dir.X;
+        }
+
+        public void Update1()
+        {
+            Pos.X = Pos.X + Dir.X;
+            if (Pos.X < -Size.Width) Pos.X = Greetings.Width + Size.Width;
             //            if (Pos.X > Game.Width) Dir.X = -Dir.X;
         }
     }

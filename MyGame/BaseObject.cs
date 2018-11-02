@@ -133,6 +133,16 @@ namespace MyGame
             Size = new Size(10, 10);
 
         }
+
+        public BaseObject(int a)
+        {
+            Pos = new Point(Rnd.Next(0, Greetings.Width),
+                            (Convert.ToInt32(Rnd.NextDouble() * Greetings.Height)));
+            Dir = new Point(Convert.ToInt32(Rnd.NextDouble() * 10) - 11,
+                            Convert.ToInt32(Rnd.NextDouble() * 10) - 11);
+            Size = new Size(10, 10);
+
+        }
         /// <summary>
         /// Метод загрузки изображения по имени файла
         /// </summary>
@@ -150,6 +160,16 @@ namespace MyGame
                 Game.Buffer.Graphics.DrawImage(Img, Pos.X, Pos.Y, Size.Width, Size.Height);
             else
                 Game.Buffer.Graphics.DrawEllipse(Pens.White, Pos.X, Pos.Y, Size.Width, Size.Height);
+        }
+        /// <summary>
+        /// опичатель отрисовки
+        /// </summary>
+        public virtual void Draw1()
+        {
+            if (Img != null)
+                Greetings.Buffer.Graphics.DrawImage(Img, Pos.X, Pos.Y, Size.Width, Size.Height);
+            else
+                Greetings.Buffer.Graphics.DrawEllipse(Pens.White, Pos.X, Pos.Y, Size.Width, Size.Height);
         }
         /// <summary>
         /// описатель обновления объекта
