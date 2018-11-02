@@ -109,9 +109,10 @@ namespace MyGame
             Buffer.Graphics.DrawString($"Your Score {Score}", new Font(FontFamily.GenericSansSerif,
             60, FontStyle.Underline), Brushes.White, 200, 200);
             Buffer.Render();
-            File.WriteAllText("..\\..\\score.dat", Score.ToString());
-            Greetings Gre = new Greetings();
-            Gre.ShowDialog();
+            if(Convert.ToInt32(File.ReadAllText("..\\..\\score.dat")) < Score)
+              File.WriteAllText("..\\..\\score.dat", Score.ToString());            
+            //Greetings Gre = new Greetings();
+            //Gre.ShowDialog();
         }
         /// <summary>
         /// создание объектов
