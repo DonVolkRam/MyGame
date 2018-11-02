@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using System.Drawing;
 using System.Collections.Generic;
+using System.IO;
 
 namespace MyGame
 {
@@ -30,11 +31,14 @@ namespace MyGame
         /// очки за астероиды
         /// </summary>
         public static int Score { get; set; }
-
+        /// <summary>
+        /// текущее количество астероидов
+        /// </summary>
         public static int AsteroidCount { get; set; }
-
+        /// <summary>
+        /// создаем журнал событий
+        /// </summary>
         public static Journal _journal = new Journal();
-
         /// <summary>
         /// констркутор
         /// </summary>
@@ -52,17 +56,21 @@ namespace MyGame
             Draw();
             Update();
         }
-
+        /// <summary>
+        /// таймер
+        /// </summary>
         private static Timer _timer = new Timer();
+        /// <summary>
+        /// переменная для случайных значений
+        /// </summary>
         public static Random Rnd = new Random();
-
         /// <summary>
         /// инициалзация графической составляющей
         /// </summary>
         /// <param name="form"></param>
         public static void Init(Form form)
         {
-            //Timer timer = new Timer { Interval = 100 };
+            //Timer timer = new Timer { Interval = 100 };            
             Score = 0;
             _timer.Start();
             _timer.Tick += Timer_Tick;
@@ -101,6 +109,7 @@ namespace MyGame
             Buffer.Graphics.DrawString($"Your Score {Score}", new Font(FontFamily.GenericSansSerif,
             60, FontStyle.Underline), Brushes.White, 200, 200);
             Buffer.Render();
+            File.WriteAllText("..\\..\\score.dat", Score.ToString());
             Greetings Gre = new Greetings();
             Gre.ShowDialog();
         }

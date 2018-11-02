@@ -39,8 +39,10 @@ namespace MyGame
         private void InitializeComponent()
         {
             this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
+            this.btn_Record = new System.Windows.Forms.Button();
+            this.btn_Exit = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // button1
@@ -52,59 +54,85 @@ namespace MyGame
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(115, 44);
             this.button1.TabIndex = 0;
-            this.button1.Text = "btnNewGame";
+            this.button1.Text = "Новая игра";
             this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // button2
+            // btn_Record
             // 
-            this.button2.BackColor = System.Drawing.Color.Black;
-            this.button2.ForeColor = System.Drawing.SystemColors.Control;
-            this.button2.Location = new System.Drawing.Point(11, 51);
-            this.button2.Margin = new System.Windows.Forms.Padding(2);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(115, 44);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "btnRecord";
-            this.button2.UseVisualStyleBackColor = false;
-            this.button2.Visible = false;
+            this.btn_Record.BackColor = System.Drawing.Color.Black;
+            this.btn_Record.ForeColor = System.Drawing.SystemColors.Control;
+            this.btn_Record.Location = new System.Drawing.Point(11, 51);
+            this.btn_Record.Margin = new System.Windows.Forms.Padding(2);
+            this.btn_Record.Name = "btn_Record";
+            this.btn_Record.Size = new System.Drawing.Size(115, 44);
+            this.btn_Record.TabIndex = 1;
+            this.btn_Record.Text = "Реорды";
+            this.btn_Record.UseVisualStyleBackColor = false;
+            this.btn_Record.Click += new System.EventHandler(this.btn_Record_Click);
             // 
-            // button3
+            // btn_Exit
             // 
-            this.button3.BackColor = System.Drawing.Color.Black;
-            this.button3.ForeColor = System.Drawing.SystemColors.Control;
-            this.button3.Location = new System.Drawing.Point(249, 51);
-            this.button3.Margin = new System.Windows.Forms.Padding(2);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(115, 44);
-            this.button3.TabIndex = 2;
-            this.button3.Text = "btnRecord";
-            this.button3.UseVisualStyleBackColor = false;
-            this.button3.Visible = false;
+            this.btn_Exit.BackColor = System.Drawing.Color.Black;
+            this.btn_Exit.ForeColor = System.Drawing.SystemColors.Control;
+            this.btn_Exit.Location = new System.Drawing.Point(249, 51);
+            this.btn_Exit.Margin = new System.Windows.Forms.Padding(2);
+            this.btn_Exit.Name = "btn_Exit";
+            this.btn_Exit.Size = new System.Drawing.Size(115, 44);
+            this.btn_Exit.TabIndex = 2;
+            this.btn_Exit.Text = "Выход";
+            this.btn_Exit.UseVisualStyleBackColor = false;
+            this.btn_Exit.Click += new System.EventHandler(this.btn_Exit_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.BackColor = System.Drawing.Color.Black;
+            this.label1.ForeColor = System.Drawing.SystemColors.Control;
+            this.label1.Location = new System.Drawing.Point(125, 28);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(120, 13);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "Автор: Волков Кирилл";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.label2.ForeColor = System.Drawing.SystemColors.Control;
+            this.label2.Location = new System.Drawing.Point(111, 9);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(144, 13);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "Космический Устранитель";
             // 
             // Greetings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(373, 101);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.btn_Exit);
+            this.Controls.Add(this.btn_Record);
             this.Controls.Add(this.button1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Greetings";
             this.Text = "Greetings";
-            this.Activated += new System.EventHandler(this.Greetings_Activated);
-            this.Load += new System.EventHandler(this.Greetings_Load);
             this.Shown += new System.EventHandler(this.Greetings_Shown);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button btn_Record;
+        private System.Windows.Forms.Button btn_Exit;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
     }
 }

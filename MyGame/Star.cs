@@ -27,7 +27,10 @@ namespace MyGame
         {
             Rnd = new Random();
         }
-
+        /// <summary>
+        /// создание объектов в приветственном окне
+        /// </summary>
+        /// <param name="a"></param>
         public Star(int a) : base(a)
         {
             ChoseRandomImage();
@@ -50,6 +53,9 @@ namespace MyGame
             Size.Width *= Dir.X;
             Size.Height *= Dir.X;
         }
+        /// <summary>
+        /// выбор случайного изображения
+        /// </summary>
         void ChoseRandomImage()
         {
             int n = Rnd.Next() % 5;
@@ -72,7 +78,9 @@ namespace MyGame
             if (Pos.X < -Size.Width) Pos.X = Game.Width + Size.Width;
             //            if (Pos.X > Game.Width) Dir.X = -Dir.X;
         }
-
+        /// <summary>
+        /// обновления для приветственного окна
+        /// </summary>
         public void Update1()
         {
             Pos.X = Pos.X + Dir.X;

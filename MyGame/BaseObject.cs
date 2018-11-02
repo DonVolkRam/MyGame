@@ -120,7 +120,6 @@ namespace MyGame
         {
             Console.WriteLine($"{this}  -  применил аптечку");
         }
-
         /// <summary>
         /// Конструктор создающщий объект в случайном месте
         /// </summary>
@@ -133,7 +132,10 @@ namespace MyGame
             Size = new Size(10, 10);
 
         }
-
+        /// <summary>
+        /// класс для создания объектов в другой форме
+        /// </summary>
+        /// <param name="a"></param>
         public BaseObject(int a)
         {
             Pos = new Point(Rnd.Next(0, Greetings.Width),
@@ -152,7 +154,7 @@ namespace MyGame
             Img = Image.FromFile(fileName);
         }
         /// <summary>
-        /// опичатель отрисовки
+        /// описатель отрисовки
         /// </summary>
         public virtual void Draw()
         {
@@ -162,7 +164,7 @@ namespace MyGame
                 Game.Buffer.Graphics.DrawEllipse(Pens.White, Pos.X, Pos.Y, Size.Width, Size.Height);
         }
         /// <summary>
-        /// опичатель отрисовки
+        /// описатель отрисовки для приветственного окна
         /// </summary>
         public virtual void Draw1()
         {

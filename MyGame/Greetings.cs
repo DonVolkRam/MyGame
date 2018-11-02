@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,15 +28,14 @@ namespace MyGame
         }
 
         private void button1_Click(object sender, EventArgs e)
-        {
-            RemoveOwnedForm(this);
+        {           
             Form form = new Form
             {
                 Width = Screen.PrimaryScreen.Bounds.Width,
                 Height = Screen.PrimaryScreen.Bounds.Height
 
             };
-
+            
             Game.Init(form);
             //form.Show();
             Game.Draw();
@@ -68,15 +68,6 @@ namespace MyGame
         }
 
         private static List<Star> _star;
-        private void Greetings_Activated(object sender, EventArgs e)
-        {
-            
-        }
-
-        private void Greetings_Load(object sender, EventArgs e)
-        {
-
-        }
 
         private void Greetings_Shown(object sender, EventArgs e)
         {
@@ -104,6 +95,24 @@ namespace MyGame
             // Связываем буфер в памяти с графическим объектом, чтобы рисовать в буфере
             Buffer = _context.Allocate(g, new Rectangle(0, 0, Width, Height));
 
+        }
+        /// <summary>
+        /// кнопка выхода из приложения
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btn_Exit_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+        /// <summary>
+        /// Вывод информации о рекордах
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btn_Record_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Текущий рекорд " + File.ReadAllText("..\\..\\score.dat")+ " очков");
         }
     }
 }
